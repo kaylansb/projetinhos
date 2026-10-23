@@ -1,47 +1,58 @@
 #include <stdio.h>
+#define TRUE 1
+#define FALSE 0
 
 void exibirOpcoes();
-void lerNums(int *a, int *b);
+void lerNums(float *a, float *b);
+int scanNum(int *p);
+int scanChar(char *ch);
 
 int main(){
-    int opcao, numA, numB, resultado;
+    int opcao, ehValido;
     char usarCalc = 's';
+    float numA, numB, resultado;
 
     while (usarCalc == 's' || usarCalc == 'S'){
         
         exibirOpcoes();
-        scanf("%d", &opcao);
-        getchar();
-        
+        if (!scanNum(&opcao)){
+            ehValido = FALSE;
+            while (!ehValido){
+                printf("Opção Inválida. Digite Uma Opção Válida.\n");
+                ehValido = scanNum(&opcao);
+            }
+        }
+        opcao -= '0';
+
         switch (opcao){
             case 1: {
                 lerNums(&numA, &numB);
                 resultado = numA + numB;
-                printf("Resultado: %d + %d = %d\n", numA, numB, resultado);
+                printf("Resultado: %.2f + %.2f = %.2f\n", numA, numB, resultado);
                 break;
         
             }
             case 2: {
                 lerNums(&numA, &numB);
                 resultado = numA - numB;
-                printf("Resultado: %d - %d = %d\n", numA, numB, resultado);
+                printf("Resultado: %.2f - %.2f = %.2f\n", numA, numB, resultado);
                 break;
         
             }
             case 3: {
                 lerNums(&numA, &numB);
                 resultado = numA * numB;
-                printf("Resultado: %d x %d = %d\n", numA, numB, resultado);
+                printf("Resultado: %.2f x %.2f = %.2f\n", numA, numB, resultado);
                 break;
         
             }
             case 4: {
                 lerNums(&numA, &numB);
-                if (numB == 0)
+                if (numB == 0.0)
                     printf("Erro: Divisão Por Zero Não é Permitida.\n");
                 else {
                     resultado = numA / numB;
-                    printf("Resultado: %d / %d = %d\n", numA, numB, resultado);
+                    printf("Resultado: %.2f / %.2f = %.2f\n", numA, numB, resultado);
                 }
                 break;
         
@@ -51,27 +62,25 @@ int main(){
                 break;
         
             }
-            
-            default:{
-                printf("Opção Inválida.\n");
-                break;
-            }
 
         }
         
-        while (usarCalc != 'n'){
+        // menor sentido isso aq sendo que é só sair com opcao 5
+        
+        if (usarCalc == 's' || usarCalc == 'S'){
             printf("Deseja Realizar Outra Operação? (s/n): ");
-            scanf("%c", &usarCalc);
-            getchar();
-            if (usarCalc == 's' || usarCalc == 'S' || usarCalc == 'n' || usarCalc == 'N')
-                break;
-            else
-                printf("Resposta inválida. Por favor, digite 's' para sim ou 'n' para não.\n");
+            
+            if (!scanChar(&usarCalc)){
+                ehValido = FALSE;
+                while (!ehValido){
+                    printf("Resposta inválida. Por favor, digite 's' para sim ou 'n' para não.\n");
+                    ehValido = scanChar(&usarCalc);
+                }
+            }
         }
 
     }
 
-    
     printf("Obrigado Por Usar a Calculadora! Até a Próxima.\n");
 
     return 0;
@@ -93,13 +102,33 @@ void exibirOpcoes(){
     printf("Opção: ");
 }
 
-void lerNums(int *a, int *b){
+void lerNums(float *a, float *b){
     printf("Digite o Primeiro Número: ");
-    scanf("%d", a);
+    scanf("%f", a);
     getchar();
     
     printf("Digite o Segundo Número: ");
-    scanf("%d", b);
+    scanf("%f", b);
     getchar();
 
+}
+
+int scanNum(int *p){
+    *p = getchar();
+    getchar();
+
+    if (*p >= '1' && *p <= '5')
+        return 1;
+
+    return 0;
+}
+
+int scanChar(char *ch){
+    *ch = getchar();
+    getchar();
+
+    if (*ch == 's' || *ch == 'S' || *ch == 'n' || *ch == 'N')
+        return 1;
+
+    return 0;
 }
