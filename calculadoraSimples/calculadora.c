@@ -6,6 +6,7 @@ void exibirOpcoes();
 void lerNums(float *a, float *b);
 int scanNum(int *p);
 int scanChar(char *ch);
+void limparBuffer();
 
 int main(){
     int opcao, ehValido;
@@ -115,20 +116,34 @@ void lerNums(float *a, float *b){
 
 int scanNum(int *p){
     *p = getchar();
-    getchar();
+    char finalInput = getchar();
 
-    if (*p >= '1' && *p <= '5')
+    if (finalInput == '\n' && (*p >= '1' && *p <= '5'))
         return 1;
+    
+    else if (finalInput != '\n')
+        limparBuffer();
 
     return 0;
 }
 
 int scanChar(char *ch){
     *ch = getchar();
-    getchar();
+    char finalInput = getchar();
 
-    if (*ch == 's' || *ch == 'S' || *ch == 'n' || *ch == 'N')
+    if (finalInput == '\n' && (*ch == 's' || *ch == 'S' || *ch == 'n' || *ch == 'N'))
         return 1;
 
+    else if (finalInput != '\n')
+        limparBuffer();
+
     return 0;
+}
+
+void limparBuffer(){
+    char lixo = getchar();
+
+    while (lixo != '\n'){
+        lixo = getchar();
+    }
 }
