@@ -5,23 +5,20 @@
 void exibirOpcoes();
 void lerNums(float *a, float *b);
 int scanNum(int *p);
+int scanFloat(float *f);
 int scanChar(char *ch);
 void limparBuffer();
 
 int main(){
-    int opcao, ehValido;
+    int opcao;
     char usarCalc = 's';
     float numA, numB, resultado;
 
     while (usarCalc == 's' || usarCalc == 'S'){
         
         exibirOpcoes();
-        if (!scanNum(&opcao)){
-            ehValido = FALSE;
-            while (!ehValido){
-                printf("Opção Inválida. Digite Uma Opção Válida.\n");
-                ehValido = scanNum(&opcao);
-            }
+        while (!scanNum(&opcao)){
+            printf("Opção Inválida. Digite Uma Opção Válida.\n");
         }
         opcao -= '0';
 
@@ -71,12 +68,8 @@ int main(){
         if (usarCalc == 's' || usarCalc == 'S'){
             printf("Deseja Realizar Outra Operação? (s/n): ");
             
-            if (!scanChar(&usarCalc)){
-                ehValido = FALSE;
-                while (!ehValido){
-                    printf("Resposta inválida. Por favor, digite 's' para sim ou 'n' para não.\n");
-                    ehValido = scanChar(&usarCalc);
-                }
+            while (!scanChar(&usarCalc)){
+                printf("Resposta inválida. Por favor, digite 's' para sim ou 'n' para não.\n");
             }
         }
 
@@ -105,12 +98,14 @@ void exibirOpcoes(){
 
 void lerNums(float *a, float *b){
     printf("Digite o Primeiro Número: ");
-    scanf("%f", a);
-    getchar();
+    while (!scanFloat(a)){
+        printf("Valor Inválido! Digite um Número.\n");
+    }
     
     printf("Digite o Segundo Número: ");
-    scanf("%f", b);
-    getchar();
+    while (!scanFloat(b)){
+        printf("Valor Inválido! Digite um Número.\n");
+    }
 
 }
 
@@ -121,6 +116,22 @@ int scanNum(int *p){
     if (finalInput == '\n' && (*p >= '1' && *p <= '5'))
         return 1;
     
+    else if (finalInput != '\n')
+        limparBuffer();
+
+    return 0;
+}
+
+int scanFloat(float *f){
+    int leu = FALSE;
+
+    if (scanf("%f", f))
+        leu = TRUE;
+    char finalInput = getchar();
+
+    if (leu && finalInput == '\n')
+        return 1;
+
     else if (finalInput != '\n')
         limparBuffer();
 
