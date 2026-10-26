@@ -10,7 +10,7 @@ int scanChar(char *ch);
 void limparBuffer();
 
 int main(){
-    int opcao;
+    int opcao, cobaiaInt;
     char usarCalc = 's';
     float numA, numB, resultado;
 
@@ -26,21 +26,33 @@ int main(){
             case 1: {
                 lerNums(&numA, &numB);
                 resultado = numA + numB;
-                printf("Resultado: %.2f + %.2f = %.2f\n", numA, numB, resultado);
+                cobaiaInt = resultado;
+                if (cobaiaInt == resultado)
+                    printf("Resultado: %.0f + %.0f = %.0f\n", numA, numB, resultado);
+                else 
+                    printf("Resultado: %.2f + %.2f = %.2f\n", numA, numB, resultado);
                 break;
         
             }
             case 2: {
                 lerNums(&numA, &numB);
                 resultado = numA - numB;
-                printf("Resultado: %.2f - %.2f = %.2f\n", numA, numB, resultado);
+                cobaiaInt = resultado;
+                if (cobaiaInt == resultado)
+                    printf("Resultado: %.0f - %.0f = %.0f\n", numA, numB, resultado);
+                else
+                    printf("Resultado: %.2f - %.2f = %.2f\n", numA, numB, resultado);
                 break;
         
             }
             case 3: {
                 lerNums(&numA, &numB);
                 resultado = numA * numB;
-                printf("Resultado: %.2f x %.2f = %.2f\n", numA, numB, resultado);
+                cobaiaInt = resultado;
+                if (cobaiaInt == resultado)
+                    printf("Resultado: %.0f x %.0f = %.0f\n", numA, numB, resultado);
+                else
+                    printf("Resultado: %.2f x %.2f = %.2f\n", numA, numB, resultado);
                 break;
         
             }
@@ -50,7 +62,11 @@ int main(){
                     printf("Erro: Divisão Por Zero Não é Permitida.\n");
                 else {
                     resultado = numA / numB;
-                    printf("Resultado: %.2f / %.2f = %.2f\n", numA, numB, resultado);
+                    cobaiaInt = resultado;
+                    if (cobaiaInt == resultado)
+                        printf("Resultado: %.0f / %.0f = %.0f\n", numA, numB, resultado);
+                    else
+                        printf("Resultado: %.2f / %.2f = %.2f\n", numA, numB, resultado);
                 }
                 break;
         
