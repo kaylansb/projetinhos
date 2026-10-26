@@ -20,10 +20,11 @@
     // }
 
 void mostrarJogo(char matriz[][dim]);
-int validarCoordenadas(char linha, char coluna);
+void scanCoords(char *linha, char *coluna);
+int validarCoordenadas(char *linha, char *coluna);
 
 int main(){
-    int jogoTerminou = FALSE;
+    int jogoTerminou = FALSE, ehValido = FALSE;
     char linha, coluna;
     char matriz[dim][dim] = {
         {' ', ' ', ' '},
@@ -37,12 +38,13 @@ int main(){
         printf("JOGADOR 1:\n");
         printf("Digite As Coordenadas Que Desejas Jogar: ");
 
-        scanf("%c", &linha);
-        if (linha != '\n')
-            scanf("%c", &coluna);
-
-
-
+        while (!ehValido){
+            scanCoords(&linha, &coluna);
+            ehValido = validarCoordenadas(&linha, &coluna);
+            if (!ehValido)
+                printf("Digite uma Coordenada Válida.\n");
+        }
+        
     }
         
 
@@ -67,18 +69,35 @@ void mostrarJogo(char matriz[][dim]){
     printf("\n");
 }
 
-int validarCoordenadas(char linha, char coluna){
+void scanCoords(char *linha, char *coluna){
+    int i;
+    char coords[2], ch;
+
+    i = 0;
+    while ((ch = getchar()) != '\n'){
+        if (i < 2){
+            coords[i] = ch;
+            i++;
+        }
+    }
+    *linha = coords[0];
+    *coluna = coords[1];
+
+}
+
+int validarCoordenadas(char *linha, char *coluna){
     if (coluna >= '1' && coluna <= '3'){
+        coluna -= '0';
         if (linha >= 'a' && linha <= 'c'){
             linha -= 'a';
-            return 1;
+            return TRUE;
         }
         else if (linha >= 'A' && linha <= 'C'){
             linha -= 'A';
-            return 1;
+            return TRUE;
         }
     }
 
-    return 0;
+    return FALSE;
 
 }
