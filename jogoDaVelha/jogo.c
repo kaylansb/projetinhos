@@ -10,49 +10,41 @@ void mostrarJogo(char matriz[][dim]);
 void jogar(char matriz[][dim], char ch);
 void scanCoords(char *linha, char *coluna);
 int ehCoordValida(char matriz[][dim], char *linha, char *coluna);
-int validarDigitosDasCoords(char *linha, char *coluna);
+int validarEConverterCoords(char *linha, char *coluna);
 char verificarSeJogoAcabou(char matriz[][dim], char ch);
 char procurarResultadoDiagonais(char matriz[][dim], char ch);
 char procurarResultadoVerticalHorizontal(char matriz[][dim], char ch);
 
 int main(){
-    int jogoTerminou = FALSE, ehValido;
-    char linha, coluna, resultado;
+    int jogoTerminou = FALSE;
+    char jogadorAtual, resultado;
     char matriz[dim][dim] = {
         {' ', ' ', ' '},
         {' ', ' ', ' '},
         {' ', ' ', ' '}, };
 
-    printf("Jogador 1: X\n");
-    printf("Jogador 2: O\n");
+    jogadorAtual = 'X';
     while (!jogoTerminou){
         mostrarJogo(matriz);
-        printf("JOGADOR 1:\n");
+        printf("JOGADOR COM %c:\n", jogadorAtual);
         printf("Digite As Coordenadas Que Desejas Jogar: ");
 
-        jogar(matriz, 'X');
+        jogar(matriz, jogadorAtual);
 
-        resultado = verificarSeJogoAcabou(matriz, 'X');
-        if (resultado == X_VENCEDOR || resultado == EMPATE)
+        resultado = verificarSeJogoAcabou(matriz, jogadorAtual);
+        if (resultado == X_VENCEDOR || resultado == O_VENCEDOR || resultado == EMPATE)
             jogoTerminou = TRUE;
-        else {
-            mostrarJogo(matriz);
-            printf("JOGADOR 2:\n");
-            printf("Digite As Coordenadas Que Desejas Jogar: ");
-            
-            jogar(matriz, 'O');
-
-            resultado = verificarSeJogoAcabou(matriz, 'O');
-            if (resultado == O_VENCEDOR || resultado == EMPATE)
-                jogoTerminou = TRUE;
-        }
+        else if (jogadorAtual == 'X')
+            jogadorAtual = 'O';
+        else
+            jogadorAtual = 'X';
     }
 
     mostrarJogo(matriz);
     switch (resultado){
-        case X_VENCEDOR: printf("O Vencedor Foi o Jogador 1 de X!\n");
+        case X_VENCEDOR: printf("O Vencedor Foi o Jogador de X!\n");
             break;
-        case O_VENCEDOR: printf("O Vencedor Foi o Jogador 2 de O!\n");
+        case O_VENCEDOR: printf("O Vencedor Foi o Jogador de O!\n");
             break;
         case EMPATE: printf("O Jogo Terminou Em Empate.\n");
             break;
@@ -97,15 +89,21 @@ void jogar(char matriz[][dim], char ch){
 
 void scanCoords(char *linha, char *coluna){
     int i;
-    char coords[2], ch;
+    char ch, coords[2] = {'\0'};
 
     i = 0;
     while ((ch = getchar()) != '\n'){
         if (i < 2){
             coords[i] = ch;
-            i++;
         }
+        i++;
     }
+
+    if (i > 2){
+        coords[0] = '\0';
+        coords[1] = '\0';
+    }
+
     *linha = coords[0];
     *coluna = coords[1];
 
@@ -113,14 +111,14 @@ void scanCoords(char *linha, char *coluna){
 
 int ehCoordValida(char matriz[][dim], char *linha, char *coluna){
     
-    if (validarDigitosDasCoords(linha, coluna) && matriz[*linha][*coluna] == ' ')
+    if (validarEConverterCoords(linha, coluna) && matriz[*linha][*coluna] == ' ')
         return 1;
     else
         return 0;
 
 }
 
-int validarDigitosDasCoords(char *linha, char *coluna){
+int validarEConverterCoords(char *linha, char *coluna){
     if (*coluna >= '1' && *coluna <= '3'){
         *coluna -= ('0' + 1);
         if (*linha >= 'a' && *linha <= 'c'){
