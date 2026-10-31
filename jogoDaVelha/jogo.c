@@ -7,6 +7,7 @@
 #define EMPATE '='
 
 void mostrarJogo(char matriz[][dim]);
+void jogar(char matriz[][dim], char ch);
 void scanCoords(char *linha, char *coluna);
 int ehCoordValida(char matriz[][dim], char *linha, char *coluna);
 int validarDigitosDasCoords(char *linha, char *coluna);
@@ -29,14 +30,7 @@ int main(){
         printf("JOGADOR 1:\n");
         printf("Digite As Coordenadas Que Desejas Jogar: ");
 
-        ehValido = FALSE;
-        while (!ehValido){
-            scanCoords(&linha, &coluna);
-            ehValido = ehCoordValida(matriz, &linha, &coluna);
-            if (!ehValido)
-                printf("Coordenada Inválida! Digite Novamente.\n");
-        }
-        matriz[linha][coluna] = 'X';
+        jogar(matriz, 'X');
 
         resultado = verificarSeJogoAcabou(matriz, 'X');
         if (resultado == X_VENCEDOR || resultado == EMPATE)
@@ -46,15 +40,8 @@ int main(){
             printf("JOGADOR 2:\n");
             printf("Digite As Coordenadas Que Desejas Jogar: ");
             
-            ehValido = FALSE;
-            while (!ehValido){
-                scanCoords(&linha, &coluna);
-                ehValido = ehCoordValida(matriz, &linha, &coluna);
-                if (!ehValido)
-                    printf("Coordenada Inválida! Digite Novamente.\n");
-            }
-            matriz[linha][coluna] = 'O';
-            
+            jogar(matriz, 'O');
+
             resultado = verificarSeJogoAcabou(matriz, 'O');
             if (resultado == O_VENCEDOR || resultado == EMPATE)
                 jogoTerminou = TRUE;
@@ -92,6 +79,20 @@ void mostrarJogo(char matriz[][dim]){
             printf("  -----------\n");
     }
     printf("\n");
+}
+
+void jogar(char matriz[][dim], char ch){
+    int ehValido = FALSE;
+    char linha, coluna;
+
+    while (!ehValido){
+        scanCoords(&linha, &coluna);
+        ehValido = ehCoordValida(matriz, &linha, &coluna);
+        if (!ehValido)
+            printf("Coordenada Inválida! Digite Novamente.\n");
+    }
+    matriz[linha][coluna] = ch;
+
 }
 
 void scanCoords(char *linha, char *coluna){
