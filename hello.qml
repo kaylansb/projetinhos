@@ -79,5 +79,3 @@ ApplicationWindow {
         }
     }
 }
-
-//QTeB0mTud01ncrivel
