@@ -11,10 +11,10 @@ typedef struct {
 infoNavios;
 
 void escolherPosDosNavios(char tabuleiro[][dim]);
-void scanCoord(char *linha, char *coluna);
-void limparBuffer();
+int scanCoord(char *linha, char *coluna);
 int temNavioEmCoord(char tabuleiro[][dim], char linha, char coluna, int navioTam);
-int validarEConverterCoord(char coords[]);
+int validarCoord(char coords[]);
+void converterCoords(char coords[]);
 void colocarNavioNoTabuleiro(char tabuleiro[][dim], char linhaVertice, char colunaVertice, int navioTam);
 void mostrarTabuleiro(char tabuleiro[][dim]);
 
@@ -100,10 +100,11 @@ void escolherPosDosNavios(char tabuleiro[][dim]){
             
             posicaoInvalida = TRUE;
             while (posicaoInvalida){
-                scanCoord(&linhaVertice, &colunaVertice);
-                posicaoInvalida = temNavioEmCoord(tabuleiro, linhaVertice, colunaVertice, navio[i].tamNavio);
-                if (posicaoInvalida)
-                    printf("Posição Inválida! Já Existe Um Navio Nessa Coordenada.\n");
+                if (!scanCoord(&linhaVertice, &colunaVertice) && 
+                    !temNavioEmCoord(tabuleiro, linhaVertice, colunaVertice, navio[i].tamNavio))
+                    printf("Posição Inválida! Digite Novamente: ");
+                else 
+                    posicaoInvalida = FALSE;
             }
             colocarNavioNoTabuleiro(tabuleiro, linhaVertice, colunaVertice, navio[i].tamNavio);
             mostrarTabuleiro(tabuleiro);
@@ -112,51 +113,52 @@ void escolherPosDosNavios(char tabuleiro[][dim]){
 
 }
 
-void scanCoord(char *linha, char *coluna){
+int scanCoord(char *linha, char *coluna){
     char ch, coords[3];
-    int i, ehValido = FALSE;
+    int i = 0;
 
-    while (!ehValido){
-        for (i = 0; i < 3; i++)
-            coords[i] = getchar();
-        
-        if (coords[2] != '\n')
-            limparBuffer();
-
-        if (validarEConverterCoord(coords))
-            ehValido = TRUE;
-        else
-            printf("Coordenada Inválida! Digite Novamente: ");
+    while ((ch = getchar()) != '\n'){
+        if (i < 3)
+            coords[i] = ch;
+        i++;
     }
-    
+
+    if (i > 3)
+        return FALSE;
+
+    if (!validarCoord(coords))
+        return FALSE;
+
+    converterCoords(coords);
     *coluna = coords[0];
     *linha = coords[1];
+
+
+    return TRUE;
 }
 
-void limparBuffer(){
-    int ch;
-    while ((ch = getchar()) != '\n');
-}
-
-int validarEConverterCoord(char coords[]){
-    if (coords[1] >= '1' && coords[1] <= '9'){
-        coords[1] -= '1';
+int validarCoord(char coords[]){
+    if ((coords[0] >= 'A' && coords[0] <= 'J') || (coords[0] >= 'a' && coords[0] <= 'j')){
         
-        if (coords[2] == '0' && coords[1] == 0)
-            coords[1] = 9;
-
-        if (coords[0] >= 'a' && coords[0] <= 'j'){
-            coords[0] -= 'a';    
-            return TRUE;
-        }
-        else if (coords[0] >= 'A' && coords[0] <= 'J'){
-            coords[0] -= 'A';
-            return TRUE;
+        if (coords[1] >= '1' && coords[1] <= '9'){    
+            if ((coords[1] == '1' && coords[2] == '0') || (coords[2] == '\n'))
+                return TRUE;
         }
     }
     
     return FALSE;
-    
+}
+
+void converterCoords(char coords[]){
+    if (coords[0] >= 'a' && coords[0] <= 'j')
+        coords[0] -= 'a';
+    else if (coords[0] >= 'A' && coords[0] <= 'J')
+        coords[0] -= 'A';
+
+    if (coords[2] == '0')
+        coords[1] = 9;
+    else
+        coords[1] -= '1';
 }
 
 int temNavioEmCoord(char tabuleiro[][dim], char linha, char coluna, int navioTam){
@@ -196,27 +198,23 @@ void colocarNavioNoTabuleiro(char tabuleiro[][dim], char linhaVertice, char colu
 //     {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '},    // 9
 //     {' ',' ',' ',' ',' ',' ',' ',' ',' ',' '}, }; // 10
 
-// void scanCoord(char *linha, char *coluna, int navioTam){
-//     char ch, coords[3] = {'1', 'a', 'a'};
+// void scanCoord(char *linha, char *coluna){
+//     char ch, coords[3];
 //     int i, ehValido = FALSE;
 
 //     while (!ehValido){
-//         i = 0;
-//         while ((ch = getchar()) != '\n'){
-//             if (i < 3){
-//                 coords[i] = ch;
-//             }
-//             i++;
-//         }
-//         if (coords[2] == '0' && coords[1] != '1')
-//             ;
-//         else if (i <= 3)
-//             ehValido = validarEConverterCoord(coords);
+//         for (i = 0; i < 3; i++)
+//             coords[i] = getchar();
+        
+//         if (coords[2] != '\n')
+//             limparBuffer();
 
-//         if (!ehValido)
+//         if (validarEConverterCoord(coords))
+//             ehValido = TRUE;
+//         else
 //             printf("Coordenada Inválida! Digite Novamente: ");
 //     }
-
+    
 //     *coluna = coords[0];
 //     *linha = coords[1];
 // }
