@@ -114,7 +114,7 @@ void escolherPosDosNavios(char tabuleiro[][dim]){
 }
 
 int scanCoord(char *linha, char *coluna){
-    char ch, coords[3];
+    char ch, coords[3]; //dar valores fixos para coords para n ficar com lixo
     int i = 0;
 
     while ((ch = getchar()) != '\n'){
