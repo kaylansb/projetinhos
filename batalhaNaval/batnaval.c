@@ -101,7 +101,7 @@ void escolherPosDosNavios(char tabuleiro[][dim]){
             posicaoInvalida = TRUE;
             while (posicaoInvalida){
                 if (!scanCoord(&linhaVertice, &colunaVertice) && 
-                    !temNavioEmCoord(tabuleiro, linhaVertice, colunaVertice, navio[i].tamNavio))
+                    !temNavioEmCoord(tabuleiro, linhaVertice, colunaVertice, navio[i].tamNavio)) //TIRAR ESSE NOT
                     printf("Posição Inválida! Digite Novamente: ");
                 else 
                     posicaoInvalida = FALSE;
