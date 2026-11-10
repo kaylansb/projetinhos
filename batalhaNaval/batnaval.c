@@ -128,7 +128,7 @@ void scanCoord(char *linha, char *coluna){
         else
             printf("Coordenada Inválida! Digite Novamente: ");
     }
-
+    
     *coluna = coords[0];
     *linha = coords[1];
 }
@@ -143,7 +143,7 @@ int validarEConverterCoord(char coords[]){
         coords[1] -= '1';
         
         if (coords[2] == '0' && coords[1] == 0)
-            coords[1] = 10;
+            coords[1] = 9;
 
         if (coords[0] >= 'a' && coords[0] <= 'j'){
             coords[0] -= 'a';    
